@@ -7,8 +7,9 @@
 class vec3
 {
 public:
-	vec3() {}
+	vec3() { e[0] = 0; e[1] = 0; e[2] = 0;}
     vec3(float e0, float e1, float e2){ e[0] = e0; e[1] = e1; e[2] = e2;}
+	vec3(float a) { e[0] = a; e[1] = a; e[2] = a; }
 	inline float x() const { return e[0];}
     inline float y() const { return e[1];}
     inline float z() const { return e[2];}
