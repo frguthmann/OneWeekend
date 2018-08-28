@@ -95,8 +95,8 @@ hitable_list * random_scene() {
 	return new hitable_list(list, i);
 }
 
-#define RES FULL_HD
-#define QUAL FULL
+#define RES MED
+#define QUAL MED
 
 int main(int argc, char ** argv)
 {
@@ -120,7 +120,7 @@ int main(int argc, char ** argv)
 	#elif (QUAL == MED)
 		const unsigned int ns = 100;
 	#elif (QUAL == HIGH)
-			const unsigned int ns = 500;
+		const unsigned int ns = 500;
 	#elif (QUAL == FULL)
 		const unsigned int ns = 1000;
 	#endif
@@ -132,6 +132,7 @@ int main(int argc, char ** argv)
     std::cout << tsum << std::endl; 
 
 	unsigned char * image = (unsigned char *) malloc(nx*ny*3*sizeof(unsigned char));
+    vec3 sample_color[ns];
 
 	unsigned int cpt = 0;
 	std::cout << "Generating image of size: " << nx << " x " << ny << std::endl;
@@ -165,14 +166,17 @@ int main(int argc, char ** argv)
 	for (int j = ny-1; j>=0; j--) {
 		#pragma omp parallel for
 		for (int i = 0; i < nx; i++) {
-			vec3 my_color = vec3(0.0, 0.0, 0.0);
 			#pragma omp parallel for
 			for (int k = 0; k < ns; k++) {
 				float u = float(i + drand48()) / float(nx);
 				float v = float(j + drand48()) / float(ny);
 				ray my_ray = cam.get_ray(u, v);
-				my_color += color(my_ray, world, 0);
+				sample_color[k] = color(my_ray, world, 0);
 			}
+            vec3 my_color = vec3(0);
+            for (int k = 0; k < ns; k<ns){
+                my_color += sample_color[k];
+            }
 			my_color /= ns;
 			unsigned int cpt = 3 * ((ny - j - 1)*nx + i);
 			store_pixel(sqrt(my_color), image, cpt);
