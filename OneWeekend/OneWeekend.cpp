@@ -6,13 +6,14 @@
 	#include <windows.h>
 	#define STBI_MSC_SECURE_CRT
 #else
-	#include <cfloat> 
+	#include <cfloat>
 #endif
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <omp.h>
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
@@ -94,8 +95,8 @@ hitable_list * random_scene() {
 	return new hitable_list(list, i);
 }
 
-#define RES LOW
-#define QUAL FAST
+#define RES FULL_HD
+#define QUAL FULL
 
 int main(int argc, char ** argv)
 {
@@ -124,7 +125,12 @@ int main(int argc, char ** argv)
 		const unsigned int ns = 1000;
 	#endif
 
-	
+    std::cout << omp_get_num_threads () << std::endl;
+    int tsum=0;
+    #pragma omp parallel
+      tsum ++;
+    std::cout << tsum << std::endl; 
+
 	unsigned char * image = (unsigned char *) malloc(nx*ny*3*sizeof(unsigned char));
 
 	unsigned int cpt = 0;
@@ -142,10 +148,10 @@ int main(int argc, char ** argv)
 	list[3] = new sphere(vec3(-1.0, 0.0, -1.0), 0.5, new dielectric(1.5));
 	list[4] = new sphere(vec3(-1.0, 0.0, -1.0), -0.45, new dielectric(1.5));
 	hitable_list * world = new hitable_list(list, listSize);*/
-	
+
 
 	hitable_list * world = random_scene();
-	
+
 	vec3 look_from(13, 2, 3);
 	vec3 look_at(0, 0, 0);
 	float focus_dist = 10.0;
@@ -188,4 +194,3 @@ int main(int argc, char ** argv)
 	//getchar();
     return 0;
 }
-
