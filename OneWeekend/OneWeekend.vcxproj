@@ -154,6 +154,7 @@
     <ClInclude Include="hitable.h" />
     <ClInclude Include="hitable_list.h" />
     <ClInclude Include="metal.h" />
+    <ClInclude Include="moving_sphere.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="stdafx.h" />

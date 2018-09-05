@@ -31,10 +31,10 @@ public:
 
 		if (drand48() < reflect_pb) {
 			vec3 reflected = reflect(r_in.direction(), rec.normal);
-			scattered = ray(rec.p, reflected);
+			scattered = ray(rec.p, reflected, r_in.time());
 		}
 		else {
-			scattered = ray(rec.p, refracted);
+			scattered = ray(rec.p, refracted, r_in.time());
 		}
 
 		return true;
