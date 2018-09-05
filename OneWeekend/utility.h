@@ -3,7 +3,9 @@
 #include "vec3.h"
 
 #define drand48() (rand() / (RAND_MAX + 1.0))
-#define M_PI 3.14159265359
+#ifndef M_PI
+	#define M_PI 3.14159265359
+#endif
 
 vec3 random_in_unit_sphere() {
 	vec3 p;
